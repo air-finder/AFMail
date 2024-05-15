@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Application;
+using Application.Mails;
 using Domain.SeedWork.Notification;
 using Infra.Data;
 using Infra.Utils.Configuration;
@@ -19,6 +20,7 @@ namespace Infra.IoC
             #region Services
             services.AddHttpContextAccessor();
             services.AddScoped<INotification, Notification>();
+            services.AddScoped<IMailService, MailService>();
             services.AddSingleton<IContainer, ServiceProviderProxy>();
             #endregion
         }
