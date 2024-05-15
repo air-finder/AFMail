@@ -4,7 +4,6 @@ using Domain.SeedWork.Notification;
 using Infra.IoC;
 using Infra.Utils.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +14,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
 );
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("App:Settings"));
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
@@ -71,6 +71,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 ServiceLocator.Initialize(app.Services.GetRequiredService<IContainer>());
 app.UseRouting();
+app.MapControllers();
 app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 app.UseSwagger();
