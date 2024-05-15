@@ -4,8 +4,6 @@
 name: .NET
 
 on:
-  push:
-    branches: [ "main", "stage", "development" ]
   pull_request:
     branches: [ "main", "stage", "development" ]
 
