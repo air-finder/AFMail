@@ -1,10 +1,12 @@
 ﻿using Application.Mails;
 using Domain.Mails.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
+[Authorize]
 public class MailController(IMailService mailService) : Controller
 {
     [HttpPost]
