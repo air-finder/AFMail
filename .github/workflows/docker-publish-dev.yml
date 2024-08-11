@@ -17,6 +17,7 @@ jobs:
         env:
           App.Settings.ConnectionString: ${{ secrets.CONNECTION_STRING }}
           App.Settings.Jwt.Secret: ${{ secrets.JWT_SECRET }}
+          Serilog.WriteTo: ${{ secrets.SEQ_API_KEY }}
 
       - name: build
         run: |
