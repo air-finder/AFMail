@@ -13,8 +13,6 @@ namespace Infra.IoC
     [ExcludeFromCodeCoverage]
     public static class NativeInjector
     {
-        public static void AddLocalHttpClients(this IServiceCollection services, IConfiguration configuration) {}
-
         public static void AddLocalServices(this IServiceCollection services, IConfiguration configuration)
         {
             #region Services

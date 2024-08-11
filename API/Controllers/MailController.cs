@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[Route("api/[controller]")]
-public class MailController(IMailService mailService) : Controller
+public class MailController(IMailService mailService) : BaseController
 {
     [HttpPost]
     public async Task<IActionResult> SendEmailAsync([FromBody] MailRequest request)
