@@ -29,5 +29,11 @@ namespace Infra.IoC
             services.AddDbContext<Context>(options => options.UseLazyLoadingProxies().UseSqlServer(connString));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
+
+        public static void AddLocalHealthChecks(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHealthChecks();
+                //.AddSeqPublisher()
+        }
     }
 }

@@ -1,9 +1,11 @@
 using System.Text.Json.Serialization;
 using API.Middlewares;
 using Domain.SeedWork.Notification;
+using HealthChecks.UI.Client;
 using Infra.IoC;
 using Infra.Utils.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
@@ -28,6 +30,7 @@ builder.Services.AddSwaggerGen(c =>
 #region Local Injections
 builder.Services.AddLocalServices(builder.Configuration);
 builder.Services.AddLocalUnitOfWork(builder.Configuration);
+builder.Services.AddLocalHealthChecks(builder.Configuration);
 #endregion
 
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
@@ -61,25 +64,28 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 ServiceLocator.Initialize(app.Services.GetRequiredService<IContainer>());
+app.MapHealthChecks("health", new HealthCheckOptions { ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse });
 app.MapControllers();
 app.UseRouting();
 app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+
+if (app.Environment.IsDevelopment())
 {
-    c.SwaggerEndpoint("/swagger/0.0.1/swagger.json", "Mail API");
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/0.0.1/swagger.json", "Mail API"); });
+}
+    
 app.UseMiddleware<ControllerMiddleware>();
 
 try
 {
-    Log.Information("Starting the application...");
+    Log.Information("[AFMail] Starting the application...");
     app.Run();
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Application failed to start");
+    Log.Fatal(ex, "[AFMail] Application failed to start");
 }
 finally
 {
